@@ -1,12 +1,10 @@
-# Image Captioning Project
+# Landmark Detection & Robot Tracking (SLAM)
 
-This repository contains ...
+This repository contains a toy implementation of 2D SLAM system. A map of the environment is created only from sensor and motion gathered from a simulated robot moving over time and space. The location of the robot is tracked as well as landmarks in the scene.
 
- [Pytorch](https://pytorch.org).
+Th starter code was taken from a project from the [Udacity Computer Vision Nanodegree](https://www.udacity.com/course/computer-vision-nanodegree--nd891), available in its original form in the repository [udacity/P3_Implement_SLAM](https://github.com/udacity/P3_Implement_SLAM).
 
 ## Introduction
-
-[Udacity Computer Vision Nanodegree](https://www.udacity.com/course/computer-vision-nanodegree--nd891), available in their original form in the repository [udacity/P3_Implement_SLAM](https://github.com/udacity/P3_Implement_SLAM).
 
 :construction:
 
@@ -14,7 +12,7 @@ This repository contains ...
 
 Table of Contents:
 
-- [Image Captioning Project](#image-captioning-project)
+- [Landmark Detection & Robot Tracking (SLAM)](#landmark-detection--robot-tracking-slam)
   - [Introduction](#introduction)
   - [How to Use This](#how-to-use-this)
     - [Overview of Files and Contents](#overview-of-files-and-contents)
@@ -36,22 +34,31 @@ In the following sections I explain in more detail all those steps.
 The project folder contains the following files:
 
 ```
-...
+.
+├── 1. Robot Moving and Sensing.ipynb           # Notebook 1
+├── 2. Omega and Xi, Constraints.ipynb          # Notebook 2
+├── 3. Landmark Detection and Tracking.ipynb    # Notebook 3
+├── Instructions.md                             # Original project instructions
+├── LICENSE                                     # 
+├── README.md                                   # This file
+├── helpers.py                                  # 
+├── images/                                     # Figures used in the notebooks
+├── requirements.txt                            # Dependencies
+└── robot_class.py                              # 
 ```
 
 The implementation is guided by the notebooks, which either contain the necessary code or import it from different scripts (explained below).
 
 As mentioned, first, the [dependencies](#dependencies) need to be installed. Assuming everything is set up, we can run the notebooks sequentially; they carry out the following tasks:
 
-- A
-- B
-- C
+- [`1. Robot Moving and Sensing.ipynb`](1. Robot Moving and Sensing.ipynb)
+- [`2. Omega and Xi, Constraints.ipynb`](2. Omega and Xi, Constraints.ipynb)
+- [`3. Landmark Detection and Tracking.ipynb`](3. Landmark Detection and Tracking.ipynb)
 
 On the other hand, the implementation scripts and their contents are the following:
 
-- A
-- B
-- C
+- [`robot_class.py`](robot_class.py)
+- [`helpers.py`](helpers.py)
 
 ### Dependencies
 
