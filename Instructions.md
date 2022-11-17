@@ -131,3 +131,23 @@ Alternatively, your submission could consist of only the **GitHub link** to your
 
 
 LICENSE: This project is licensed under the terms of the MIT license.
+
+### Summary of the Requirements
+
+- Submitted files: `robot_class.py` + `3. Landmark Detection and Tracking.ipynb`.
+- `robot_class.py`:
+  - Implement the `sense()` function, as required.
+- `3. Landmark Detection and Tracking.ipynb`:
+  - Initialize constraint matrices `omea` and `xi` correctly.
+  - Update the constraints correctly when iterating the sensor & motion data.
+  - Deliver correct values of `mu`.
+  - Answer the question about the final robot pose.
+  - All tests passed.
+
+### Suggested Improvements
+
+> - Create a new version of slam in which omega only keeps track of the latest robot pose (you do not need all of them to implement slam correctly).
+> - Add visualization code that creates a more realistic-looking display world
+Create a non-random maze of landmarks and see how your implementation of slam performs.
+> - Display your robot world at every time step and stack these image frames to create a short video clip and to see how the robot localizes itself and builds up a model of the world over time
+> - Take a look at an implementation of slam that uses reinforcement learning and probabilistic motion models, at this [Github link](https://github.com/devendrachaplot/Neural-Localization).
