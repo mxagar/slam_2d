@@ -43,9 +43,9 @@ The implementation is guided by the notebooks, which either contain the necessar
 
 As mentioned, first, the [dependencies](#dependencies) need to be installed. Assuming everything is set up, we can run the notebooks sequentially; they carry out the following tasks:
 
-- [`1. Robot Moving and Sensing.ipynb`](1.\ Robot\ Moving\ and\ Sensing.ipynb): the `robot` class defined in `robot_class.py` is explained, as well as some related utilities, such as map visualization and motion handling.
-- [`2. Omega and Xi, Constraints.ipynb`](2.\ Omega\ and\ Xi,\ Constraints.ipynb): the key aspects of the Graph SLAM are explained for the 1D case.
-- [`3. Landmark Detection and Tracking.ipynb`](3.\ Landmark\ Detection\ and\ Tracking.ipynb): **that's where SLAM is implemented**.
+- `1. Robot Moving and Sensing.ipynb`: the `robot` class defined in `robot_class.py` is explained, as well as some related utilities, such as map visualization and motion handling.
+- `2. Omega and Xi, Constraints.ipynb`: the key aspects of the Graph SLAM are explained for the 1D case.
+- `3. Landmark Detection and Tracking.ipynb`: **that's where SLAM is implemented**.
 
 On the other hand, the implementation scripts and their contents are the following:
 
@@ -72,44 +72,59 @@ The [Graph SLAM Algorithm](http://robots.stanford.edu/papers/thrun.graphslam.pdf
 The method consists in a cycle of two functions:
 
 - `measure()`, which yields the distance from the robot position to reachable landmarks, accounting for a measurement error,
-- and `move()`, which updates the robot position accounting for motion error.
+- and `move()`, which updates the robot position given a relative movement vector, accounting for motion error.
 
 Thus, as the robot moves and measures, we get a sequence of relative distance measurements between consecutive robot positions and robot positions and landmarks; these sequence is effectively a set of **constraints**.
 
-Each motion of measurement constraint is a Gaussian; for instance, in a 1D world in which we go from `x0` to `x1` with a step size of `dx` and an error of `sigma`, the constraint equation is given by:
+Each motion of measurement constraint is a Gaussian; for instance, in a 1D world in which we go from `x0` to `x1` with a step size of `dx` and a motion error of `sigma`, the constraint equation is given by:
 
 $$ \frac{1}{\sqrt{2\pi\sigma}} \mathrm{exp}(-\frac{1}{2}\frac{(x_1-x_0-dx)^2}{\sigma^2}).$$
 
-The relevant part of that constraint lies in the exponent, which can be reduced to be
+The relevant part of that constraint concentrates in the exponent, which can be reduced to be
 
 $$ \frac{x_1}{\sigma} - \frac{x_0}{\sigma} = \frac{dx}{\sigma}.$$
 
-Now, the key idea behind the Graph SLAM method consists in aggregating in a linear system those constraints. To that end, two objects are defined:
+The key idea behind the Graph SLAM method consists in aggregating in a linear system those reduced constraint expressions. To that end, two objects are defined:
 
-- the `Omega` square matrix, which contains all the  
-- and the `xi` vector are defined, which 
+- the `Omega` square matrix, which contains all the location and landmark variable coefficients  
+- and the `xi` vector are defined, which contains the distances between two consecutive locations or a location and a landmark.
 
+The following figure shows how `Omega` (in blue) and `xi` (in pink) are assembled. Let's say we have a 1D world with 2 landmarks `L0, L1` and three robot positions `x0, x1, x2`. Then, if we go from `x0` to `x1` with a `dx = 5`, assuming `sigma = 1`, the matrices are filled as follows:
 
-![Graph SLAM](./images/motion_constraint.png)
+<p align="center">
+  <img src="./images/motion_constraint.png" alt="Graph SLAM" width=500px>
+</p>
+
+Note that *one constraint with two variables has two representations*, which need to be accounted for in `Omega` and `xi`. If we take another step, the constraint equations are formed analogously, and the matrix cells are updated **by adding the new constraint coefficients**. That's so because, in reality, we are multiplying Gaussians, which effectively results in adding exponents!
+
+If we measure the distance from location/position `x1` to a landmark `L1`, the reduced constraint equation has the following form:
+
+$$ \frac{L_1}{\sigma} - \frac{x_1}{\sigma} = \frac{dL}{\sigma}.$$
+
+This measurement constraint is equivalent to the former motion constraint, and it is entered to the constraint matrices `Omega` and `xi` in the same fashion; only now the uncertainty `sigma` refers to the measurement error, not the movement error.
 
 **Now the best part**: It turns out that the vector `mu` which contains the optimal solution which describes the robot path, its final location and the location of the landmarks is the following:
 
 $$ \mu = (x_0, x_1, \dots, x_n, L_0, L_1, \dots, L_m)^{T} = \Omega^{-1}\xi.$$
 
-As simple as that! We aggregate the constraint factors in the matrices, we invert `omega` and a simple product gives the location and the map :sunglasses:.
+As simple as that! We aggregate the constraint coefficients and distances along the time in the matrices, we invert `omega` and a simple product gives the location and the map :sunglasses:.
 
 In order to extend the method to a 2D world, we can either:
 
-- for each dimension, work with an independent pair `Omega` and `xi`
+- for each dimension, work with an independent pair `Omega` and `xi`,
 - or pack the `x` and `y` coordinates of each variable one after the other, as shown in the following figure: 
 
-![2D Graph SLAM](./images/constraints2D.png)
+<p align="center">
+  <img src="./images/constraints2D.png" alt="2D Graph SLAM" width=500px>
+</p>
 
 In this mini project, the latter method is used, because it generalizes nicely the 1D case. However, note that this method creates one large and sparse `Omega` matrix which requires twice as much memory as the former method.
 
-The implementation
+The final implementation takes a random set of landmarks in a 2D grid world and a noisy robot path with measurements and visualizes the estimated final robot pose (red `O`), as well as the estimated landmarks (purple `X` symbols).
 
-![Map: Estimated robot pose and landmarks](./images/robot_world.png)
+<p align="center">
+  <img src="./images/robot_world.png" alt="Map: Estimated robot pose and landmarks" width=500px>
+</p>
 
 If you'd like more details about the Graph SLAM algorithm, I've added some references to the section [Interesting Links](#Interesting-Links).
 
