@@ -25,7 +25,7 @@ class robot:
     #
     def __init__(self, world_size = 100.0, measurement_range = 30.0,
                  motion_noise = 1.0, measurement_noise = 1.0):
-        self.measurement_noise = 0.0
+        self.measurement_noise = measurement_noise # 0.0
         self.world_size = world_size
         self.measurement_range = measurement_range
         self.x = world_size / 2.0
@@ -36,7 +36,7 @@ class robot:
         self.num_landmarks = 0
     
     
-    # returns a positive, random float
+    # returns a random float in [-1,1)
     def rand(self):
         return random.random() * 2.0 - 1.0
     
@@ -65,8 +65,7 @@ class robot:
     #        landmarks to be visible at all times
     #
     
-    ## TODO: paste your complete the sense function, here
-    ## make sure the indentation of the code is correct
+    ## Complete the sense function
     def sense(self):
         ''' This function does not take in any parameters, instead it references internal variables
             (such as self.landamrks) to measure the distance between the robot and any landmarks
@@ -79,18 +78,28 @@ class robot:
            
         measurements = []
         
-        ## TODO: iterate through all of the landmarks in a world
+        ## Iterate through all of the landmarks in a world
         
-        ## TODO: For each landmark
+        ## For each landmark
         ## 1. compute dx and dy, the distances between the robot and the landmark
         ## 2. account for measurement noise by *adding* a noise component to dx and dy
         ##    - The noise component should be a random value between [-1.0, 1.0)*measurement_noise
         ##    - Feel free to use the function self.rand() to help calculate this noise component
+        ##    - It may help to reference the `move` function for noise calculation
         ## 3. If either of the distances, dx or dy, fall outside of the internal var, measurement_range
         ##    then we cannot record them; if they do fall in the range, then add them to the measurements list
         ##    as list.append([index, dx, dy]), this format is important for data creation done later
         
-        ## TODO: return the final, complete list of measurements
+        for i in range(self.num_landmarks):
+            # Distance from robot to landmark
+            dx, dy = self.landmarks[i][0]-self.x, self.landmarks[i][1]-self.y
+            # Add noise
+            dx += self.measurement_noise*self.rand()
+            dy += self.measurement_noise*self.rand()
+            if abs(dx) < self.measurement_range and abs(dy) < self.measurement_range:
+                measurements.append([i, dx, dy])
+        
+        ## Return the final, complete list of measurements
         return measurements
 
 

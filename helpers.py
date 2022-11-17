@@ -51,7 +51,9 @@ def display_world(world_size, position, landmarks=None):
 # this routine makes the robot data
 # the data is a list of measurements and movements: [measurements, [dx, dy]]
 # collected over a specified number of time steps, N
-#
+# Note that with 2 time steps we have only 1 measurement + 1 motion step!
+# With 3 time steps, 2, and so on.
+# That means: one step considers TWO positions already.
 def make_data(N, num_landmarks, world_size, measurement_range, motion_noise, 
               measurement_noise, distance):
 
@@ -73,6 +75,8 @@ def make_data(N, num_landmarks, world_size, measurement_range, motion_noise,
         dx = cos(orientation) * distance
         dy = sin(orientation) * distance
     
+        # N steps are taken, but if not all landmarks
+        # are seen, then again N steps are taken...
         for k in range(N-1):
     
             # collect sensor measurements in a list, Z
@@ -83,21 +87,31 @@ def make_data(N, num_landmarks, world_size, measurement_range, motion_noise,
                 seen[Z[i][0]] = True
     
             # move
+            # note that the values of (dx, dy) change only
+            # if we hit the world boundary, otherwise
+            # we keep moving in the same direction
             while not r.move(dx, dy):
                 # if we'd be leaving the robot world, pick instead a new direction
                 orientation = random.random() * 2.0 * pi
                 dx = cos(orientation) * distance
                 dy = sin(orientation) * distance
 
+            # after a correct movement,
             # collect/memorize all sensor and motion data
+            # however, note that the measurement happened before the moevement
             data.append([Z, [dx, dy]])
 
         # we are done when all landmarks were observed; otherwise re-run
         complete = (sum(seen) == num_landmarks)
 
     print(' ')
-    print('Landmarks: ', r.landmarks)
+    # These are the true positions of the landmarks,
+    # we should obtain something similar at the end
+    print('True landmarks: ', r.landmarks)
     print(r)
 
-
+    # Access:
+    # measurement = data[i][0]
+    # motion = data[i][1
+    
     return data
