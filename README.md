@@ -67,10 +67,8 @@ You should create a python environment (e.g., with [conda](https://docs.conda.io
 A short summary of commands required to have all in place is the following:
 
 ```bash
-conda create -n img-capt python=3.6
-conda activate img-capt
-conda install pytorch torchvision -c pytorch
-conda install -c anaconda scikit-image
+conda create -n slam-2d python=3.6
+conda activate slam-2d
 conda install pip
 pip install -r requirements.txt
 ```
@@ -91,6 +89,7 @@ pip install -r requirements.txt
 ## Interesting Links
 
 - [My notes and code](https://github.com/mxagar/computer_vision_udacity) on the [Udacity Computer Vision Nanodegree](https://www.udacity.com/course/computer-vision-nanodegree--nd891).
+- Implementation of SLAM that uses reinforcement learning and probabilistic motion models: [Active Neural Localization (Paper)](https://arxiv.org/abs/1801.08214) | [Github Repository](https://github.com/devendrachaplot/Neural-Localization).
 
 ## Authorship
 
