@@ -142,6 +142,7 @@ This is in reality a very simplistic example of Graph SLAM in 2D, so *many* exte
 - [A Tutorial on Graph-Based SLAM](http://ais.informatik.uni-freiburg.de/teaching/ws11/robotics2/pdfs/ls-slam-tutorial.pdf).
 - [The GraphSLAM Algorithm with Applications to Large-Scale Mapping of Urban Structures, Thrun et al., 2006](http://robots.stanford.edu/papers/thrun.graphslam.pdf)
 - An implementation of SLAM that uses reinforcement learning and probabilistic motion models: [Active Neural Localization (Paper)](https://arxiv.org/abs/1801.08214) | [Github Repository](https://github.com/devendrachaplot/Neural-Localization).
+- [GradSLAM](https://gradslam.github.io/).
 
 ## Authorship
 
